@@ -11,8 +11,10 @@ import statsmodels.discrete.discrete_model as sm
 data_raw = pd.read_csv('/home/ec2-user/WA-clean.csv.gz', compression='gzip')
 df = data_raw.drop(['state', 'stop_time', 'location_raw', 'county_fips', 'police_department', 'driver_age_raw', 'driver_race_raw',
                          'violation_raw','search_type_raw', 'is_arrested'], axis=1)
-df['stop_date'] = pd.to_datetime(df.stop_date)
-df.driver_age.fillna(df.driver_age.mean(), inplace=True)
+df['stop_date'] = pd.to_datetime(df.stop_date) #make stopdate a datetime object
+df.driver_age.fillna(df.driver_age.mean(), inplace=True) #fill missing driver ages with mean
+
+#Dummy coding:
 df['driver_gender'] = pd.Series(np.where(df.driver_gender.values == 'F', 1, 0),
           df.index)
 df['officer_gender'] = pd.Series(np.where(df.officer_gender.values == 'F', 1, 0),
@@ -24,14 +26,17 @@ merged = df.merge(race_dummies, left_index=True, right_index=True)
 merged = merged.merge(officer_race, left_index=True, right_index=True)
 merged['drugs_related_stop'] = pd.Series(np.where(merged.drugs_related_stop.values == False, 0, 1),
           merged.index)
+
+#was a search conducted --> This is the outcome variable
 merged['search_conducted'] = pd.Series(np.where(merged.search_conducted.values == False, 0, 1),
           merged.index)
-merged['White_White'] = merged.White * merged.O_White
-merged['Black_White'] = merged.Black * merged.O_White
-merged['Asian_White'] = merged.Asian * merged.O_White
-merged['Hispanic_White'] = merged.Hispanic * merged.O_White
-merged['White_Black'] = merged.White * merged.O_Black
-merged['Black_Black'] = merged.Black * merged.O_Black
+
+merged['White_White'] = merged.White * merged.O_White#White driver White officer
+merged['Black_White'] = merged.Black * merged.O_White#Black driver White officer
+merged['Asian_White'] = merged.Asian * merged.O_White#Asian driver White officer
+merged['Hispanic_White'] = merged.Hispanic * merged.O_White#Hispanic driver White officer
+merged['White_Black'] = merged.White * merged.O_Black#White driver Black officer
+merged['Black_Black'] = merged.Black * merged.O_Black #Black driver Black officer
 
 X = merged.loc[:, ['driver_gender', 'driver_age', 'officer_gender', 'drugs_related_stop', 'Asian', 'Black', 'Hispanic',
                    'Other', 'White', 'O_Asian', 'O_Black', 'O_Hispanic', 'O_Other',
