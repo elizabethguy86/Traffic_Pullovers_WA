@@ -57,7 +57,7 @@ log_loss(fitted_y_test, preds)
 #log_loss = 0.091707177832494116
 
 
-#Outputs:
+#Outputs/Unregularized log model:
 
 '''[('driver_gender', -0.45287198553218022),
  ('driver_age', -0.022968236778229147),
@@ -79,3 +79,24 @@ log_loss(fitted_y_test, preds)
  ('Hispanic_White', 0.16441330211105804),
  ('White_Black', 0.0030278565889577521),
  ('Black_Black', 0.23015004098785694)]'''
+
+ #Outputs/Regularized log model:
+
+'''[('driver_gender', -0.3935240677185543),
+ ('driver_age', -0.026125974607706486),
+ ('officer_gender', -0.18398255317748974),
+ ('drugs_related_stop', 5.344023308753422),
+ ('Asian', -0.897088274439007),
+ ('Black', -0.4200507938800719),
+ ('Hispanic', -0.33117288482073703),
+ ('White', -1.0801687160251703),
+ ('O_Asian', 0.09729142178973262),
+ ('O_Black', 0.24368222941758863),
+ ('O_Hispanic', 0.24624028011210103),
+ ('O_White', 0.6638878949044615),
+ ('White_White', -0.42025884032732197),
+ ('Black_White', -0.35444857105573435),
+ ('Asian_White', -0.6968193355182569),
+ ('Hispanic_White', -0.7312850205495123),
+ ('White_Black', -0.6475790081350615),
+ ('Black_Black', 0.05709114369361723)]'''
